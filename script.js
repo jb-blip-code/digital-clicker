@@ -32,6 +32,28 @@ const UPGRADE_DEFS = [
       state.perSecond += 1.5;
     },
   },
+  {
+    id: "data-center",
+    name: "Data Center",
+    description: "+15 per click, +6 bits/sec",
+    baseCost: 900,
+    growth: 1.75,
+    apply: (state) => {
+      state.perClick += 15;
+      state.perSecond += 6;
+    },
+  },
+  {
+    id: "super-cluster",
+    name: "Super Cluster",
+    description: "+75 per click, +30 bits/sec",
+    baseCost: 6500,
+    growth: 1.9,
+    apply: (state) => {
+      state.perClick += 75;
+      state.perSecond += 30;
+    },
+  },
 ];
 
 const defaultState = () => ({
