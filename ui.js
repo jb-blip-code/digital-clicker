@@ -66,22 +66,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     lastClick = now;
 
-    let intensity = Math.min(3, clickStreak * 0.28);
+    // reduce growth effect by 50%: both multiplier and cap halved
+    let intensity = Math.min(1.5, clickStreak * 0.14);
     setIntensity(intensity);
 
     // small press feedback
     clickBtn.classList.add("pressed");
-    setTimeout(() => clickBtn.classList.remove("pressed"), 120);
+    setTimeout(() => clickBtn.classList.remove("pressed"), 100);
 
-    // decay intensity over time
+    // spawn particle burst (count proportional to intensity)
+    const particleCount = Math.max(4, Math.round(intensity * 8));
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      const angle = Math.random() * Math.PI * 2;
+      const baseDist = 28 + Math.random() * 34; // base distance
+      const dist = baseDist * (0.6 + intensity * 0.8); // scale with intensity
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist * 0.7; // slightly flattened
+      p.style.setProperty("--dx", `${dx.toFixed(2)}px`);
+      p.style.setProperty("--dy", `${dy.toFixed(2)}px`);
+      const size = Math.round(6 + Math.random() * 8 + intensity * 6);
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      // color mix between accent and accent-2
+      const useAlt = Math.random() > 0.6;
+      p.style.background = useAlt
+        ? "radial-gradient(circle, rgba(72,255,155,0.95), transparent 45%)"
+        : "radial-gradient(circle, rgba(0,212,255,0.95), transparent 45%)";
+      clickBtn.appendChild(p);
+      setTimeout(() => p.remove(), 800);
+    }
+
+    // decay intensity over time (fades faster now)
     if (decayTimer) clearTimeout(decayTimer);
     decayTimer = setTimeout(() => {
       (function fade() {
-        intensity = Math.max(0, intensity - 0.18);
+        intensity = Math.max(0, intensity - 0.12);
         setIntensity(intensity);
-        if (intensity > 0.02) setTimeout(fade, 90);
+        if (intensity > 0.02) setTimeout(fade, 80);
       })();
-    }, 180);
+    }, 140);
   });
 
   resetBtn.addEventListener("click", () => {

@@ -176,24 +176,31 @@ h1 {
 
 /* Click intensity visual effects */
 .core-btn.cool {
-  transform: scale(calc(1 + var(--click-intensity) * 0.12));
-  box-shadow: inset 0 0 0 1px rgba(181, 241, 255, 0.45), 0 calc(var(--click-intensity) * 10px) calc(var(--click-intensity) * 36px) rgba(7, 20, 30, 0.75);
-  filter: saturate(calc(1 + var(--click-intensity) * 0.6));
+  /* reduced growth: scale and shadow reduced by ~50% to avoid layout impact */
+  transform: scale(calc(1 + var(--click-intensity) * 0.06));
+  box-shadow: inset 0 0 0 1px rgba(181, 241, 255, 0.45), 0 calc(var(--click-intensity) * 5px) calc(var(--click-intensity) * 18px) rgba(7, 20, 30, 0.6);
+  filter: saturate(calc(1 + var(--click-intensity) * 0.3));
 }
 
-.core-btn::after {
-  content: "";
+/* Particle burst visuals (created dynamically by JS) */
+.particle {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(calc(0.8 + var(--click-intensity) * 0.6));
-  width: 120%;
-  height: 120%;
-  pointer-events: none;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, calc(var(--click-intensity) * 0.45)), transparent 40%);
-  opacity: calc(var(--click-intensity) * 0.9);
-  transition: transform 220ms ease, opacity 220ms ease;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transform-origin: center center;
+  animation: particle-burst 700ms cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes particle-burst {
+  from {
+    transform: translate(var(--dx), var(--dy)) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(calc(var(--dx) * 1.6), calc(var(--dy) * 1.6)) scale(0.28);
+    opacity: 0;
+  }
 }
 
 .core-btn:active {
