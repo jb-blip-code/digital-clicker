@@ -80,22 +80,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const p = document.createElement("div");
       p.className = "particle";
       const angle = Math.random() * Math.PI * 2;
-      const baseDist = 28 + Math.random() * 34; // base distance
+      // increase spread so sparks fly further
+      const baseDist = (28 + Math.random() * 34) * 1.5;
       const dist = baseDist * (0.6 + intensity * 0.8); // scale with intensity
       const dx = Math.cos(angle) * dist;
       const dy = Math.sin(angle) * dist * 0.7; // slightly flattened
       p.style.setProperty("--dx", `${dx.toFixed(2)}px`);
       p.style.setProperty("--dy", `${dy.toFixed(2)}px`);
-      const size = Math.round(6 + Math.random() * 8 + intensity * 6);
+      // make particles ~2x bigger
+      const baseSize = Math.round(6 + Math.random() * 8 + intensity * 6);
+      const size = Math.round(baseSize * 2);
       p.style.width = `${size}px`;
       p.style.height = `${size}px`;
-      // color mix between accent and accent-2
-      const useAlt = Math.random() > 0.6;
-      p.style.background = useAlt
-        ? "radial-gradient(circle, rgba(72,255,155,0.95), transparent 45%)"
-        : "radial-gradient(circle, rgba(0,212,255,0.95), transparent 45%)";
+      // yellow/orange spark look
+      const warm = Math.random() > 0.5;
+      p.style.background = warm
+        ? "radial-gradient(circle, rgba(255,220,120,0.98), rgba(255,150,60,0.85) 60%)"
+        : "radial-gradient(circle, rgba(255,235,150,0.95), rgba(255,190,90,0.75) 55%)";
+      p.style.boxShadow = "0 0 8px rgba(255,200,80,0.5)";
       clickBtn.appendChild(p);
-      setTimeout(() => p.remove(), 800);
+      setTimeout(() => p.remove(), 1200);
     }
 
     // decay intensity over time (fades faster now)
