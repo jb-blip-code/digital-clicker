@@ -198,12 +198,17 @@ h1 {
 }
 
 @keyframes particle-burst {
-  from {
-    transform: translate(-50%, -50%) scale(1);
+  /* start slightly offset from the exact center so the particle doesn't occlude the text
+     quickly fade-in and travel outward */
+  0% {
+    transform: translate(calc(-50% + var(--dx) * 0.12), calc(-50% + var(--dy) * 0.12)) scale(0.4);
+    opacity: 0;
+  }
+  8% {
     opacity: 1;
   }
-  to {
-    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.28);
+  100% {
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.25);
     opacity: 0;
   }
 }
