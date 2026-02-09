@@ -185,20 +185,25 @@ h1 {
 /* Particle burst visuals (created dynamically by JS) */
 .particle {
   position: absolute;
+  left: 50%;
+  top: 50%;
   border-radius: 50%;
   pointer-events: none;
   mix-blend-mode: screen;
   transform-origin: center center;
+  will-change: transform, opacity;
+  /* start centered on the button; animation moves it by --dx/--dy */
+  transform: translate(-50%, -50%) scale(1);
   animation: particle-burst 700ms cubic-bezier(.2,.8,.2,1);
 }
 
 @keyframes particle-burst {
   from {
-    transform: translate(var(--dx), var(--dy)) scale(1);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
   to {
-    transform: translate(calc(var(--dx) * 1.6), calc(var(--dy) * 1.6)) scale(0.28);
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.28);
     opacity: 0;
   }
 }
