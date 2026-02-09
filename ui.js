@@ -45,7 +45,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Game.onChange(render);
 
-  clickBtn.addEventListener("click", () => Game.clickCore());
+  // Click effect: increases visual intensity when clicked continuously
+  let clickStreak = 0;
+  let lastClick = 0;
+  let decayTimer = null;
+
+  function setIntensity(v) {
+    clickBtn.style.setProperty("--click-intensity", String(v));
+    if (v > 0) clickBtn.classList.add("cool");
+    else clickBtn.classList.remove("cool");
+  }
+
+  clickBtn.addEventListener("click", () => {
+    Game.clickCore();
+    const now = Date.now();
+    if (now - lastClick < 400) {
+      clickStreak = Math.min(12, clickStreak + 1);
+    } else {
+      clickStreak = 1;
+    }
+    lastClick = now;
+
+    let intensity = Math.min(3, clickStreak * 0.28);
+    setIntensity(intensity);
+
+    // small press feedback
+    clickBtn.classList.add("pressed");
+    setTimeout(() => clickBtn.classList.remove("pressed"), 120);
+
+    // decay intensity over time
+    if (decayTimer) clearTimeout(decayTimer);
+    decayTimer = setTimeout(() => {
+      (function fade() {
+        intensity = Math.max(0, intensity - 0.18);
+        setIntensity(intensity);
+        if (intensity > 0.02) setTimeout(fade, 90);
+      })();
+    }, 180);
+  });
 
   resetBtn.addEventListener("click", () => {
     const ok = window.confirm("Reset all progress for Digital Clicker?");

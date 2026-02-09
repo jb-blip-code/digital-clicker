@@ -157,6 +157,8 @@ h1 {
   place-content: center;
   gap: 0.4rem;
   color: #eaffff;
+  position: relative;
+  --click-intensity: 0;
   background:
     radial-gradient(circle at 50% 32%, rgba(0, 212, 255, 0.45), transparent 50%),
     radial-gradient(circle at 50% 70%, rgba(72, 255, 155, 0.28), transparent 55%),
@@ -170,6 +172,28 @@ h1 {
 .core-btn:hover {
   transform: translateY(-2px);
   box-shadow: inset 0 0 0 1px rgba(181, 241, 255, 0.5), 0 22px 58px rgba(3, 9, 13, 0.62);
+}
+
+/* Click intensity visual effects */
+.core-btn.cool {
+  transform: scale(calc(1 + var(--click-intensity) * 0.12));
+  box-shadow: inset 0 0 0 1px rgba(181, 241, 255, 0.45), 0 calc(var(--click-intensity) * 10px) calc(var(--click-intensity) * 36px) rgba(7, 20, 30, 0.75);
+  filter: saturate(calc(1 + var(--click-intensity) * 0.6));
+}
+
+.core-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(calc(0.8 + var(--click-intensity) * 0.6));
+  width: 120%;
+  height: 120%;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, calc(var(--click-intensity) * 0.45)), transparent 40%);
+  opacity: calc(var(--click-intensity) * 0.9);
+  transition: transform 220ms ease, opacity 220ms ease;
 }
 
 .core-btn:active {
